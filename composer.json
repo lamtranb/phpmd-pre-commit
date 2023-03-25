@@ -1,0 +1,85 @@
+{
+    "name": "lamtranb/phpmd-pre-commit",
+    "type": "project",
+    "description": "PHPMD with pre-commit.",
+    "keywords": [
+        "phpmd",
+        "pre-commit"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "composer/composer": "^2.0"
+    },
+    "require-dev": {
+        "brainmaestro/composer-git-hooks": "^2.8",
+        "friendsofphp/php-cs-fixer": "3.*",
+        "matt-allan/laravel-code-style": "0.7.1",
+        "nunomaduro/collision": "^5.0",
+        "nunomaduro/larastan": "^0.7.0",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "phpmd/phpmd": "^2.9",
+        "phpro/grumphp": "^1.3",
+        "phpunit/phpunit": "^9.3.3",
+        "povils/phpmnd": "^2.4",
+        "psalm/plugin-laravel": "^1.4",
+        "vimeo/psalm": "^4.7"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "process-timeout": 0,
+        "allow-plugins": {
+            "composer/installers": true,
+            "metafox/package-discover-plugin": true,
+            "phpro/grumphp": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+            ]
+        },
+        "grumphp": {
+            "config-default-path": ".config/grumphp.yml",
+            "project-path": ".",
+            "disable-plugin": false
+        }
+    },
+    "autoload": {
+        "files": [
+        ],
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "files": [
+        ],
+        "psr-4": {
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump"
+        ],
+        "post-root-package-install": [
+            "@php ./vendor/bin/psalm --init",
+            "@php ./vendor/bin/psalm-plugin enable psalm/plugin-laravel -q",
+            "@php ./vendor/bin/grumphp git:init"
+        ],
+        "post-create-project-cmd": [
+        ],
+        "phpstan": "phpstan analyse --memory-limit=512M",
+        "phpstan-baseline": "phpstan analyse --memory-limit=512M --generate-baseline",
+        "lint-staged": [
+            "@php vendor/bin/phpstan analyse --memory-limit 2G -c '.config/lint-staged-phpstan.neon' $(git --no-pager diff --cached --name-only --diff-filter=MARC)",
+            "@php vendor/bin/php-cs-fixer fix --config '.config/lint-staged-phpcs.php' $(git --no-pager diff --cached --name-only --diff-filter=MARC)",
+            "@php vendor/bin/phpmd $(git --no-pager diff --cached --name-only --diff-filter=MARC | xargs | sed -e 's/ /,/g') text .config/phpmd-ruleset.xml"
+        ],
+        "phpcs": "php vendor/bin/php-cs-fixer fix --config '.config/lint-staged-phpcs.php' $(git --no-pager diff --cached --name-only --diff-filter=MARC)"
+    }
+}

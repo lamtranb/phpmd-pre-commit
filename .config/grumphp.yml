@@ -1,0 +1,171 @@
+grumphp:
+  process_timeout: 300
+  stop_on_failure: false
+  ignore_unstaged_changes: false
+  hide_circumvention_tip: false
+  environment:
+    variables:
+      MFOX_CACHE_DRIVER: "array"
+#    files: [ ]
+#    paths: [ ]
+  ascii:
+    failed: .config/grumphp_failed.txt
+    succeeded: .config/grumphp_succeeded.txt
+  fixer:
+    enabled: true
+    fix_by_default: true
+  parallel:
+    enabled: true
+    max_workers: 8
+  tasks:
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/git_commit_message.md
+    git_commit_message:
+      allow_empty_message: false
+      enforce_capitalized_subject: false
+      enforce_no_subject_punctuations: false
+      enforce_no_subject_trailing_period: true
+      enforce_single_lined_subject: true
+      type_scope_conventions:
+        - types:
+            - build
+            - ci
+            - chore
+            - docs
+            - feat
+            - fix
+            - perf
+            - refactor
+            - revert
+            - style
+            - test
+        - scope: [ ]
+      max_body_width: 72
+      max_subject_width: 60
+#      matchers:
+#        Must contain JIRA issue number: /JIRA-\d+/
+      case_insensitive: true
+      multiline: false
+      additional_modifiers: ''
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/phpstan.md
+    phpstan:
+      configuration: .config/lint-staged-phpstan.neon
+      level: max
+      triggered_by: [ 'php' ]
+      memory_limit: 4G
+      use_grumphp_paths: true
+      ignore_patterns:
+        - Database/
+        - tests
+        - vendor
+        - modules/metafox/core/src/Repositories/Eloquent/SiteSettingRepository.php
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/phpcsfixer.md
+    phpcsfixer:
+      verbose: false
+      allow_risky: ~
+      config_contains_finder: false
+      config: .config/lint-staged-phpcs.php
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/phpmd.md
+    phpmd:
+      whitelist_patterns: [ ]
+      report_format: text
+      ruleset: [ ".config/phpmd-ruleset.xml" ]
+      triggered_by: [ 'php' ]
+      exclude:
+        - /Database/
+        - /Tests/
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/phpmnd.md
+    phpmnd:
+      directory: .
+      whitelist_patterns: [ 'Database' ]
+      exclude: [ 'vendor' ]
+      exclude_name: [ ]
+      exclude_path:
+        - /seeders
+        - /helpers
+      extensions: [ ]
+      hint: false
+      ignore_funcs: [ ]
+      ignore_numbers:
+        - 200
+        - -1
+        - 4
+        - 1
+        - 0
+      ignore_strings: [ ]
+      strings: false
+      triggered_by: [ 'php -d memory_limit=-1' ]
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/yamllint.md
+    #    yamllint:
+    #      whitelist_patterns: [ ]
+    #      ignore_patterns: [ ]
+    #      object_support: false
+    #      exception_on_invalid_type: false
+    #      parse_constant: false
+    #      parse_custom_tags: false
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/phplint.md
+    phplint:
+      exclude: [ ]
+      jobs: ~
+      short_open_tag: false
+      ignore_patterns: [ ]
+      triggered_by: [ 'php' ]
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/phpversion.md
+    phpversion:
+      project: '7.4'
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/psalm.md
+    #    psalm:
+    #      config: .config/psalm.xml
+    #      ignore_patterns: [ ]
+    #      no_cache: false
+    #      report: ~
+    #      output_format: null
+    #      threads: 1
+    #      triggered_by: [ 'php' ]
+    #      show_info: false
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/xmllint.md
+    #    xmllint:
+    #      ignore_patterns: [ ]
+    #      load_from_net: false
+    #      x_include: false
+    #      dtd_validation: false
+    #      scheme_validation: false
+    #      triggered_by: [ 'xml' ]
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/jsonlint.md
+    jsonlint:
+      ignore_patterns: [ ]
+      detect_key_conflicts: false
+    #https://github.com/phpro/grumphp/blob/master/doc/tasks/file_size.md
+    file_size:
+      max_size: 128k
+      ignore_patterns: [
+          'composer.lock',
+          'Laravel.postman_collection.json',
+          'test_image_large.jpg',
+          'sticker_2.gif',
+          'sticker_9.gif',
+          'sticker_17.gif',
+          'bg1_1024.png',
+          'bg2_1024.png',
+          'bg3_1024.png',
+          'bg4_1024.png',
+          'bg5_1024.png',
+          'bg16_1024.png',
+          'bg17_1024.png',
+          'bg18_1024.png',
+          'bg19_1024.png',
+          'bg20_1024.png',
+          'bg22_1024.png',
+          'bg23_1024.png',
+          'bg24_1024.png',
+          'bg25_1024.png',
+          'bg26_1024.png',
+          'bg27_1024.png',
+          'bg28_1024.png',
+          'bg29_1024.png',
+          'bg2.png',
+          'bg3.png',
+          'bg17.png',
+          'bg19.png',
+          'bg20.png',
+          'bg22.png',
+      ]
